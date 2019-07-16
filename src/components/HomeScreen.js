@@ -39,7 +39,6 @@ export default class HomeScreen extends Component {
             <MapWrapper>
               {/* map over deals and create a card for each deal */}
               {offers.map(offer => {
-                
                 const {
                   createdAt,
                   active,

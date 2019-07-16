@@ -12,7 +12,7 @@ import CountDown from "react-native-countdown-component";
 const Card = styled.View`
   width: 300;
   background: #1cbbf3;
-  min-height: 130;
+  min-height: 80;
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
@@ -66,7 +66,7 @@ export default function DealCard(props) {
         <CountdownWrapper>
           <CountDown
             until={duration}
-            size={20}
+            size={15}
             timeToShow={["M", "S"]}
             digitStyle={{ backgroundColor: "#feeec1" }}
             digitTxtStyle={{ color: "#1cbbf3" }}

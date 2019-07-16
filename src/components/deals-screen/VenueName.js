@@ -3,8 +3,9 @@ import styled from "styled-components";
 
 const NameWrapper = styled.Text`
   text-align: center;
-  font-size: 15;
+  font-size: 25;
   font-weight: 700;
+  padding: 10px 0;
 `;
 
 export default function VenueName(props) {

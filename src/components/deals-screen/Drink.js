@@ -4,6 +4,8 @@ import styled from "styled-components";
 const DrinkWrapper = styled.Text`
   text-align: center;
   flex: 1;
+  font-size: 20;
+  font-weight: 700;
 `;
 
 export default function Drink(props) {

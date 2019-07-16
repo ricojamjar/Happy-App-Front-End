@@ -12,21 +12,24 @@ import CountDown from "react-native-countdown-component";
 const Card = styled.View`
   width: 300;
   background: #1cbbf3;
-  height: 130;
+  min-height: 130;
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
   margin: 10px;
+  border-radius: 5px;
+  elevation: 4;
 `;
 
 const DealWrapper = styled.View`
   flex: 1;
   margin: 10px;
+  padding: 5px;
   background: #b9f0f8;
-  padding-left: 3px;
-  height: 100;
-  text-align: center;
+  border-radius: 5px;
+  elevation: 3;
   justify-content: center;
+  align-items: center;
 `;
 
 const LeftContainer = styled.View`
@@ -39,6 +42,7 @@ const LeftContainer = styled.View`
 const QuantityPriceWrapper = styled.Text`
   flex: 1;
   text-align: center;
+  font-size: 15;
 `;
 
 const CountdownWrapper = styled.View``;
@@ -72,9 +76,9 @@ export default function DealCard(props) {
       </LeftContainer>
 
       <DealWrapper>
+        <Emoji type={type} />
         <Drink drink={drink} />
         <QuantityPriceWrapper>{`${quantity} for ${price}`}</QuantityPriceWrapper>
-        <Emoji type={type} />
       </DealWrapper>
     </Card>
   );

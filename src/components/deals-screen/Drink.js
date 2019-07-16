@@ -4,7 +4,7 @@ import styled from "styled-components";
 const DrinkWrapper = styled.Text`
   text-align: center;
   flex: 1;
-  font-size: 20;
+  font-size: 16;
   font-weight: 700;
 `;
 

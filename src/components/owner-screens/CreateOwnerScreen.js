@@ -1,7 +1,7 @@
 import React from "react";
 import Auth from "@aws-amplify/auth";
 import Loading from "../Loading";
-import { getOwner } from "../../Api";
+import { getOwner, postOwner } from "../../Api";
 import {
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -17,15 +17,20 @@ import {
 import { Container, Item, Input, Icon } from "native-base";
 
 const INITIAL_STATE = {
-  email: "",
-  phone_number: "",
-  description: "",
-  address: "",
-  name: "",
-  title: "",
-  photo_uri: "",
-  lat: 53.4868458,
-  lng: -2.2401032,
+  profile: {
+    id: "",
+    email: "",
+    phoneNumber: "",
+    place_id: "",
+    longDescription: null,
+    address: "",
+    venueName: "",
+    shortDescription: null,
+    data_type: "profile",
+    photoUri: null,
+    latitude: 53.4868458,
+    longitude: -2.2401032
+  },
   loading: false
 };
 export default class HomeScreen extends React.Component {
@@ -36,18 +41,22 @@ export default class HomeScreen extends React.Component {
     Auth.currentAuthenticatedUser()
       .then(user => {
         this.setState({
-          email: user.attributes.email
+          profile: {
+            ...this.state.profile,
+            email: user.attributes.email,
+            id: user.username
+          }
         });
       })
       .catch(err => console.log(err));
   };
   onChangeText = (key, value) => {
-    this.setState({ [key]: value });
+    this.setState({ profile: { ...this.state.profile, [key]: value } });
   };
   getOwner = () => {
     this.setState({ loading: true });
-    const { phone_number } = this.state;
-    getOwner(phone_number)
+    const { phoneNumber } = this.state.profile;
+    getOwner(phoneNumber)
       .then(
         ({
           formatted_address,
@@ -58,25 +67,23 @@ export default class HomeScreen extends React.Component {
           place_id
         }) => {
           this.setState({
-            address: formatted_address,
-            name,
-            place_id,
-            lat,
-            lng,
-            phone_number,
+            profile: {
+              ...this.state.profile,
+              address: formatted_address,
+              venueName: name,
+              place_id,
+              latitude: lat,
+              longitude: lng,
+              phoneNumber
+            },
             loading: false
           });
         }
       )
       .then(() => {
-        Alert.alert(
-          "Sucessful! ",
-          {
-            text: "OK",
-            onPress: () => this.props.navigation.navigate("OwnerApp")
-          },
-          { cancelable: false }
-        );
+        postOwner(this.state.profile).then(() => {
+          this.props.navigation.navigate("OwnerApp");
+        });
       })
       .catch(err => {
         this.setState({ loading: false });
@@ -138,14 +145,15 @@ export default class HomeScreen extends React.Component {
               <Container style={styles.infoContainer}>
                 <View style={styles.container}>
                   <Text style={styles.Text}>
-                    Use your phone # registered in google map{" "}
+                    Use your phone number registered in Google Maps, be sure to
+                    remove the first 0 and add the 44 prefix
                   </Text>
                   {/*  phone_number section  */}
                   <Item rounded style={styles.itemStyle}>
                     <Icon active name="call" style={styles.iconStyle} />
                     <Input
                       style={styles.input}
-                      placeholder="441234567890"
+                      placeholder="441614567890"
                       placeholderTextColor="#0468d4"
                       returnKeyType="go"
                       autoCapitalize="none"
@@ -154,7 +162,7 @@ export default class HomeScreen extends React.Component {
                         this.getOwner();
                       }}
                       onChangeText={value =>
-                        this.onChangeText("phone_number", value)
+                        this.onChangeText("phoneNumber", value)
                       }
                     />
                   </Item>

@@ -15,11 +15,16 @@ const EmojiIcon = styled.Text`
   line-height: 35;
 `;
 
-export default function Emoji(props) {
-  const { type } = props;
+export default function Emoji({ type }) {
   return (
     <EmojiWrapper>
-      <EmojiIcon>{type}</EmojiIcon>
+
+      {type === "Beer" ? <EmojiIcon>🍺️</EmojiIcon> : null}
+      {type === "Wine" ? <EmojiIcon>🍷️</EmojiIcon> : null}
+      {type === "Spirits" ? <EmojiIcon>🥃️</EmojiIcon> : null}
+      {type === "Cocktail" ? <EmojiIcon>🍸️</EmojiIcon> : null}
+      {type === "Non-alcoholic" ? <EmojiIcon>🥛️</EmojiIcon> : null}
+   
     </EmojiWrapper>
   );
 }

@@ -1,7 +1,6 @@
 import React from "react";
 import Auth from "@aws-amplify/auth";
 import Loading from "../Loading";
-import { getOwner } from "../../Api";
 import {
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -16,17 +15,14 @@ import {
 } from "react-native";
 import { Container, Item, Input, Icon } from "native-base";
 import MenuButton from "../MenuButton";
+import { getOwnerByOwnerId, updateOwnerDetails } from "../../Api";
 
 const INITIAL_STATE = {
-  email: "",
-  phone_number: "",
-  description: "",
-  address: "",
-  name: "",
-  title: "",
+  owner: {},
+  ownerID: "",
   photo_uri: "",
-  lat: 53.4868458,
-  lng: -2.2401032,
+  title: "",
+  description: "",
   loading: false
 };
 export default class HomeScreen extends React.Component {
@@ -36,8 +32,11 @@ export default class HomeScreen extends React.Component {
   componentDidMount = async () => {
     Auth.currentAuthenticatedUser()
       .then(user => {
-        this.setState({
-          email: user.attributes.email
+        this.setState({ ownerID: user.username });
+        getOwnerByOwnerId(user.username).then(ownerDetails => {
+          this.setState({
+            owner: ownerDetails
+          });
         });
       })
       .catch(err => console.log(err));
@@ -45,48 +44,39 @@ export default class HomeScreen extends React.Component {
   onChangeText = (key, value) => {
     this.setState({ [key]: value });
   };
-  getOwner = () => {
-    this.setState({ loading: true });
-    const { phone_number } = this.state;
-    getOwner(phone_number)
-      .then(
-        ({
-          formatted_address,
-          geometry: {
-            location: { lat, lng }
-          },
-          name,
-          place_id
-        }) => {
-          this.setState({
-            address: formatted_address,
-            name,
-            place_id,
-            lat,
-            lng,
-            phone_number,
-            loading: false
-          });
-        }
-      )
-      .then(() => {
-        Alert.alert(
-          "Sucessful! Please finish the following options and click the submit button"
-        );
-      })
-      .catch(err => {
-        this.setState({ loading: false });
-        Alert.alert(
-          "Error when register: please provide the correct telephone format"
-        );
+  submit = async () => {
+    try {
+      // this.setState({ loading: true });
+      const { photo_uri, title, description, ownerID, owner } = this.state;
+      console.log(owner);
+      const data = await updateOwnerDetails(ownerID, {
+        ...owner,
+        photoUri: photo_uri,
+        shortDescription: title,
+        longDescription: description
       });
-  };
-  submit = () => {
-    this.setState({ loading: true });
-    const { photo_uri, title, description } = this.state;
+      console.log(data);
+      this.setState({
+        loading: false,
+        photo_uri: "",
+        title: "",
+        description: ""
+      });
+      this.props.navigation.navigate("Profile");
+    } catch {
+      err => {
+        this.setState({
+          loading: false,
+          photo_uri: "",
+          title: "",
+          description: ""
+        });
+        Alert.alert("please fill all field");
+      };
+    }
   };
   render() {
-    const { loading } = this.state;
+    const { loading, photo_uri, title, description } = this.state;
     if (loading) return <Loading />;
     return (
       <SafeAreaView style={styles.container}>
@@ -104,38 +94,13 @@ export default class HomeScreen extends React.Component {
             <View style={styles.container}>
               <Container style={styles.infoContainer}>
                 <View style={styles.container}>
-                  <Text style={styles.Text}>
-                    Use your phone # registered in google map{" "}
-                  </Text>
-                  {/*  phone_number section  */}
-                  <Item rounded style={styles.itemStyle}>
-                    <Icon active name="call" style={styles.iconStyle} />
-                    <Input
-                      style={styles.input}
-                      placeholder="441234567890"
-                      placeholderTextColor="#0468d4"
-                      returnKeyType="go"
-                      autoCapitalize="none"
-                      autoCorrect={false}
-                      onSubmitEditing={event => {
-                        this.getOwner();
-                      }}
-                      onChangeText={value =>
-                        this.onChangeText("phone_number", value)
-                      }
-                    />
-                  </Item>
-                  <TouchableOpacity
-                    onPress={() => this.getOwner()}
-                    style={styles.buttonStyle}
-                  >
-                    <Text style={styles.buttonText}>Register</Text>
-                  </TouchableOpacity>
+                  <Text style={styles.Text}>Update your profile </Text>
                   {/*  photo_uri section  */}
                   <Item rounded style={styles.itemStyle}>
                     <Icon active name="image" style={styles.iconStyle} />
                     <Input
                       style={styles.input}
+                      value={photo_uri}
                       placeholder="profile photo url"
                       placeholderTextColor="#0468d4"
                       returnKeyType="next"
@@ -154,6 +119,7 @@ export default class HomeScreen extends React.Component {
                     <Icon active name="beer" style={styles.iconStyle} />
                     <Input
                       style={styles.input}
+                      value={title}
                       placeholder="short description"
                       placeholderTextColor="#0468d4"
                       returnKeyType="next"
@@ -171,6 +137,7 @@ export default class HomeScreen extends React.Component {
                     <Icon active name="book" style={styles.iconStyle} />
                     <Input
                       style={styles.input}
+                      value={description}
                       placeholder="venue description"
                       placeholderTextColor="#0468d4"
                       returnKeyType="go"

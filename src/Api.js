@@ -21,7 +21,6 @@ export const getOffers = () => {
 
 export const getOwnerByOwnerId = ownerId => {
   return request.get(`owners/${ownerId}`).then(({ data }) => {
-    console.log(data, "ownerbyId");
     return data;
   });
 };

@@ -15,50 +15,46 @@ import {
 import MenuButton from "../MenuButton";
 import { Container, Item, Input, Icon, Picker } from "native-base";
 import { postOffer, getOwnerByOwnerId } from "../../Api";
+
+const INPUT = {
+  type: "",
+  duration: "",
+  price: "",
+  drink: "",
+  quantity: ""
+};
 export default class PromoScreen extends React.Component {
   state = {
-    offer: {
-      duration: "",
-      price: "",
-      drink: "",
-      quantity: "",
-      id: "",
-      data_type: "offer",
-      coupon_id: "uasdgkjasd",
-      active: "true",
-      venueName: "",
-      type: "beer"
-    }
+    ...INPUT,
+    id: "",
+    data_type: "offer",
+    coupon_id: "uasdgkjasd",
+    active: "true",
+    venueName: ""
   };
   componentDidMount = async () => {
     Auth.currentAuthenticatedUser()
       .then(user => {
         getOwnerByOwnerId(user.username).then(ownerDetails => {
           this.setState({
-            offer: {
-              ...this.state.offer,
-              id: ownerDetails.id,
-              venueName: ownerDetails.venueName
-            }
+            id: ownerDetails.id,
+            venueName: ownerDetails.venueName
           });
         });
       })
       .catch(err => console.log(err));
   };
   onChangeText = (key, value) => {
-    this.setState({ offer: { ...this.state.offer, [key]: value } });
-  };
-  onValueChange = value => {
-    this.setState({
-      type: value
-    });
+    this.setState({ [key]: value });
   };
   submit = () => {
-    postOffer(this.state.offer);
-    this.setState({ loading: true });
+    const offer = { ...this.state };
+    postOffer(offer).then(() => {
+      this.setState({ ...INPUT });
+    });
   };
   render() {
-    const { duration, price, drink, quantity } = this.state;
+    const { duration, price, drink, quantity, type } = this.state;
     return (
       <SafeAreaView style={styles.container}>
         <MenuButton navigation={this.props.navigation} />
@@ -134,32 +130,42 @@ export default class PromoScreen extends React.Component {
                       value={quantity}
                       placeholder="Quantity"
                       placeholderTextColor="#0468d4"
-                      returnKeyType="go"
+                      returnKeyType="done"
                       autoCapitalize="none"
                       autoCorrect={false}
                       ref="FourthInput"
-                      onSubmitEditing={event => this.submit()}
+                      onSubmitEditing={event => {
+                        this.refs.FifthInput._root.focus();
+                      }}
                       onChangeText={value =>
                         this.onChangeText("quantity", value)
                       }
                     />
                   </Item>
-                  <Picker
-                    mode="dropdown"
-                    iosIcon={<Icon name="arrow-down" />}
-                    placeholder="Select your SIM"
-                    placeholderStyle={{ color: "#bfc6ea" }}
-                    placeholderIconColor="#007aff"
-                    style={{ width: undefined }}
-                    selectedValue={this.state.selected}
-                    onValueChange={onChangeText("type", value)}
-                  >
-                    <Picker.Item label="Wallet" value="key0" />
-                    <Picker.Item label="ATM Card" value="key1" />
-                    <Picker.Item label="Debit Card" value="key2" />
-                    <Picker.Item label="Credit Card" value="key3" />
-                    <Picker.Item label="Net Banking" value="key4" />
-                  </Picker>
+                  {/*  Type section  */}
+                  <Item style={styles.pickerStyle}>
+                    <Picker
+                      mode="dropdown"
+                      placeholder="Select drink type"
+                      placeholderStyle={{ color: "#0468d4" }}
+                      placeholderIconColor="#007aff"
+                      style={{ borderColor: "#0468d4" }}
+                      selectedValue={type}
+                      ref="FifthInput"
+                      onValueChange={selectedValue =>
+                        this.onChangeText("type", selectedValue)
+                      }
+                    >
+                      <Picker.Item label="Beer" value="Beer" />
+                      <Picker.Item label="Wine" value="Wine" />
+                      <Picker.Item label="Spirits" value="Spirits" />
+                      <Picker.Item label="Cocktail" value="Cocktail" />
+                      <Picker.Item
+                        label="Non-alcoholic"
+                        value="Non-alcoholic"
+                      />
+                    </Picker>
+                  </Item>
                   <TouchableOpacity
                     onPress={() => this.submit()}
                     style={styles.buttonStyle}
@@ -199,6 +205,10 @@ const styles = StyleSheet.create({
   },
   itemStyle: {
     marginBottom: 10,
+    borderColor: "#5a52a5"
+  },
+  pickerStyle: {
+    marginBottom: 30,
     borderColor: "#5a52a5"
   },
   buttonStyle: {

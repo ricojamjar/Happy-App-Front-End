@@ -13,7 +13,7 @@ import {
   Alert
 } from "react-native";
 import MenuButton from "../MenuButton";
-import { Container, Item, Input, Icon } from "native-base";
+import { Container, Item, Input, Icon, Picker } from "native-base";
 import { postOffer, getOwnerByOwnerId } from "../../Api";
 export default class PromoScreen extends React.Component {
   state = {
@@ -139,6 +139,22 @@ export default class PromoScreen extends React.Component {
                       }
                     />
                   </Item>
+                  <Picker
+                    mode="dropdown"
+                    iosIcon={<Icon name="arrow-down" />}
+                    placeholder="Select your SIM"
+                    placeholderStyle={{ color: "#bfc6ea" }}
+                    placeholderIconColor="#007aff"
+                    style={{ width: undefined }}
+                    selectedValue={this.state.selected}
+                    onValueChange={this.onValueChange.bind(this)}
+                  >
+                    <Picker.Item label="Wallet" value="key0" />
+                    <Picker.Item label="ATM Card" value="key1" />
+                    <Picker.Item label="Debit Card" value="key2" />
+                    <Picker.Item label="Credit Card" value="key3" />
+                    <Picker.Item label="Net Banking" value="key4" />
+                  </Picker>
                   <TouchableOpacity
                     onPress={() => this.submit()}
                     style={styles.buttonStyle}

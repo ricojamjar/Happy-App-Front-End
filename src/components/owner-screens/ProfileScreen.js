@@ -11,21 +11,22 @@ import {
 } from "react-native";
 import Image from "react-native-scalable-image";
 import MenuButton from "../MenuButton";
+import {getOwnerByOwnerId} from "../../Api"
 
 const INITIAL_STATE = {
   userExist: false,
   userID: "",
   email: "",
-  phone_number: "441618344989",
-  description:
+  phoneNumber: "",
+  longDescription:
     "Whilst we sell fantastic modern & seasonal beers, wines & mixed drinks we also have loose leaf teas and locally sourced filtered coffee from Ancoats Coffee plus sandwiches, pastries, sweet & savory baked goods.",
   address: "Hanover St, Manchester M60 0AB, UK",
-  name: "The Pilcrow Pub",
-  title: "We are a contemporary pub situated at Sadlers Yard, Manchester.",
-  photo_uri:
+  venueName: "The Pilcrow Pub",
+  shortDescription: "We are a contemporary pub situated at Sadlers Yard, Manchester.",
+  photoUri:
     "https://static1.squarespace.com/static/5437909ee4b02d632f5b2d5d/58d93902e4fcb5ad94d1f2e4/58d976766b8f5b87ea1852f5/1490646748896/DSC_9391.JPG?format=500w",
-  lat: 53.4868458,
-  lng: -2.2401032,
+  latitude: 53.4868458,
+  longitude: -2.2401032,
   loading: false
 };
 export default class PromoScreen extends React.Component {
@@ -33,10 +34,11 @@ export default class PromoScreen extends React.Component {
   componentDidMount() {
     Auth.currentAuthenticatedUser()
       .then(user => {
-        console.log(user.username);
-        this.setState({
-          userID: user.username
-        });
+        getOwnerByOwnerId(user.username).then(ownerDetails => {
+          this.setState(ownerDetails)
+          console.log(this.state)
+        })
+       
       })
       .catch(err => console.log(err));
     //get owner profile from backend
@@ -44,28 +46,28 @@ export default class PromoScreen extends React.Component {
   render() {
     const {
       email,
-      phone_number,
-      description,
+      phoneNumber,
+      longDescription,
       address,
-      name,
-      title,
-      photo_uri,
-      lat,
-      lng,
+      venueName,
+      shortDescription,
+      photoUri,
+      latitude,
+      longitude,
       loading
     } = this.state;
     return (
       <ScrollView style={{ backgroundColor: "#FDD96E" }}>
         <MenuButton navigation={this.props.navigation} />
         <View style={styles.container}>
-          <Text style={styles.textStyle}>{name}</Text>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.phone}>Tel: {phone_number}</Text>
+          <Text style={styles.textStyle}>{venueName}</Text>
+          <Text style={styles.title}>{shortDescription}</Text>
+          <Text style={styles.phone}>Tel: {phoneNumber}</Text>
           <Image
             width={Dimensions.get("window").width - 32}
-            source={{ uri: `${photo_uri}` }}
+            source={{ uri: "https://static1.squarespace.com/static/5437909ee4b02d632f5b2d5d/58d93902e4fcb5ad94d1f2e4/58d976766b8f5b87ea1852f5/1490646748896/DSC_9391.JPG?format=500w" }}
           />
-          <Text style={styles.title}>{description}</Text>
+          <Text style={styles.title}>{longDescription}</Text>
           <MapView
             style={styles.map}
             provider="google"
@@ -78,11 +80,11 @@ export default class PromoScreen extends React.Component {
           >
             <Marker
               coordinate={{
-                latitude: lat,
-                longitude: lng
+                latitude: latitude,
+                longitude: longitude
               }}
-              title={name}
-              description={title}
+              title={venueName}
+              description={shortDescription}
             />
           </MapView>
           <Text style={styles.offer}>Previous offers</Text>

@@ -117,7 +117,7 @@ const OwnerDrawerNavigator = createDrawerNavigator(
   {
     Profile: ProfileScreen,
     Edit: EditScreen,
-    Promo: PromoTabNavigator,
+    Promo: HomeScreen,
     NewPromo: NewPromoScreen,
     Reset: ResetPasswordScreen
   },

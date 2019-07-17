@@ -14,29 +14,43 @@ import {
 } from "react-native";
 import MenuButton from "../MenuButton";
 import { Container, Item, Input, Icon } from "native-base";
+import { postOffer, getOwnerByOwnerId } from "../../Api";
 export default class PromoScreen extends React.Component {
   state = {
-    owner: "",
-    duration: "",
-    price: "",
-    drink: "",
-    quantity: ""
+    offer: {
+      duration: "",
+      price: "",
+      drink: "",
+      quantity: "",
+      id: "",
+      data_type: "offer",
+      coupon_id: "uasdgkjasd",
+      active: "true",
+      venueName: "",
+      type: "beer"
+    }
   };
   componentDidMount = async () => {
     Auth.currentAuthenticatedUser()
       .then(user => {
-        this.setState({
-          email: user.attributes.email
+        getOwnerByOwnerId(user.username).then(ownerDetails => {
+          this.setState({
+            offer: {
+              ...this.state.offer,
+              id: ownerDetails.id,
+              venueName: ownerDetails.venueName
+            }
+          });
         });
       })
       .catch(err => console.log(err));
   };
   onChangeText = (key, value) => {
-    this.setState({ [key]: value });
+    this.setState({ offer: { ...this.state.offer, [key]: value } });
   };
   submit = () => {
+    postOffer(this.state.offer);
     this.setState({ loading: true });
-    const {} = this.state;
   };
   render() {
     const { duration, price, drink, quantity } = this.state;
@@ -60,7 +74,7 @@ export default class PromoScreen extends React.Component {
                   <Item rounded style={styles.itemStyle}>
                     <Input
                       style={styles.input}
-                      value={duration}
+                      value={this.state.duration}
                       placeholder="duration (minutes)"
                       placeholderTextColor="#0468d4"
                       returnKeyType="next"
@@ -98,7 +112,7 @@ export default class PromoScreen extends React.Component {
                       value={drink}
                       placeholder="Drink"
                       placeholderTextColor="#0468d4"
-                      returnKeyType="go"
+                      returnKeyType="next"
                       autoCapitalize="none"
                       autoCorrect={false}
                       ref="ThirdInput"
@@ -120,7 +134,9 @@ export default class PromoScreen extends React.Component {
                       autoCorrect={false}
                       ref="FourthInput"
                       onSubmitEditing={event => this.submit()}
-                      onChangeText={value => this.onChangeText("drink", value)}
+                      onChangeText={value =>
+                        this.onChangeText("quantity", value)
+                      }
                     />
                   </Item>
                   <TouchableOpacity

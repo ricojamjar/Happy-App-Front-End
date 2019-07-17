@@ -8,14 +8,10 @@ export default class LandingScreen extends React.Component {
     venue_name: ""
   };
   componentDidMount = async () => {
-    await this.loadApp();
-  };
-  loadApp = async () => {
     await Auth.currentAuthenticatedUser()
-      .then(user => {
-        getOwnerByOwnerId(user.username).then(ownerDetails => {
-          this.setState({ venue_name: ownerDetails.venueName });
-        });
+      .then(async user => {
+        const owner = await getOwnerByOwnerId(user.username);
+        this.setState({ venue_name: owner.venueName });
       })
       .catch(err => console.log(err));
     this.props.navigation.navigate(

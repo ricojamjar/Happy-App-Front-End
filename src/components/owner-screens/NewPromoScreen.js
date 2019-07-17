@@ -48,6 +48,11 @@ export default class PromoScreen extends React.Component {
   onChangeText = (key, value) => {
     this.setState({ offer: { ...this.state.offer, [key]: value } });
   };
+  onValueChange = value => {
+    this.setState({
+      type: value
+    });
+  };
   submit = () => {
     postOffer(this.state.offer);
     this.setState({ loading: true });
@@ -74,7 +79,7 @@ export default class PromoScreen extends React.Component {
                   <Item rounded style={styles.itemStyle}>
                     <Input
                       style={styles.input}
-                      value={this.state.duration}
+                      value={duration}
                       placeholder="duration (minutes)"
                       placeholderTextColor="#0468d4"
                       returnKeyType="next"
@@ -147,7 +152,7 @@ export default class PromoScreen extends React.Component {
                     placeholderIconColor="#007aff"
                     style={{ width: undefined }}
                     selectedValue={this.state.selected}
-                    onValueChange={this.onValueChange.bind(this)}
+                    onValueChange={onChangeText("type", value)}
                   >
                     <Picker.Item label="Wallet" value="key0" />
                     <Picker.Item label="ATM Card" value="key1" />

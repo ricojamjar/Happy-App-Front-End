@@ -2,18 +2,16 @@ import React from "react";
 import Auth from "@aws-amplify/auth";
 import logo from "../../images/beer.png";
 import { StyleSheet, View, Image } from "react-native";
-import { get } from "react-native/Libraries/Utilities/PixelRatio";
+import { getOwnerByOwnerId } from "../../Api";
 export default class LandingScreen extends React.Component {
   state = {
     venue_name: ""
   };
   componentDidMount = async () => {
-    await this.loadApp();
-  };
-  loadApp = async () => {
     await Auth.currentAuthenticatedUser()
-      .then(user => {
-        //get owner(user.username)
+      .then(async user => {
+        const owner = await getOwnerByOwnerId(user.username);
+        this.setState({ venue_name: owner.venueName });
       })
       .catch(err => console.log(err));
     this.props.navigation.navigate(

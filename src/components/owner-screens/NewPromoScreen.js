@@ -13,47 +13,48 @@ import {
   Alert
 } from "react-native";
 import MenuButton from "../MenuButton";
-import { Container, Item, Input, Icon } from "native-base";
+import { Container, Item, Input, Icon, Picker } from "native-base";
 import { postOffer, getOwnerByOwnerId } from "../../Api";
+
+const INPUT = {
+  type: "",
+  duration: "",
+  price: "",
+  drink: "",
+  quantity: ""
+};
 export default class PromoScreen extends React.Component {
   state = {
-    offer: {
-      duration: "",
-      price: "",
-      drink: "",
-      quantity: "",
-      id: "",
-      data_type: "offer",
-      coupon_id: "uasdgkjasd",
-      active: "true",
-      venueName: "",
-      type: "beer"
-    }
+    ...INPUT,
+    id: "",
+    data_type: "offer",
+    coupon_id: "uasdgkjasd",
+    active: "true",
+    venueName: ""
   };
   componentDidMount = async () => {
     Auth.currentAuthenticatedUser()
       .then(user => {
         getOwnerByOwnerId(user.username).then(ownerDetails => {
           this.setState({
-            offer: {
-              ...this.state.offer,
-              id: ownerDetails.id,
-              venueName: ownerDetails.venueName
-            }
+            id: ownerDetails.id,
+            venueName: ownerDetails.venueName
           });
         });
       })
       .catch(err => console.log(err));
   };
   onChangeText = (key, value) => {
-    this.setState({ offer: { ...this.state.offer, [key]: value } });
+    this.setState({ [key]: value });
   };
   submit = () => {
-    postOffer(this.state.offer);
-    this.setState({ loading: true });
+    const offer = { ...this.state };
+    postOffer(offer).then(() => {
+      this.setState({ ...INPUT });
+    });
   };
   render() {
-    const { duration, price, drink, quantity } = this.state;
+    const { duration, price, drink, quantity, type } = this.state;
     return (
       <SafeAreaView style={styles.container}>
         <MenuButton navigation={this.props.navigation} />
@@ -74,7 +75,7 @@ export default class PromoScreen extends React.Component {
                   <Item rounded style={styles.itemStyle}>
                     <Input
                       style={styles.input}
-                      value={this.state.duration}
+                      value={duration}
                       placeholder="duration (minutes)"
                       placeholderTextColor="#0468d4"
                       returnKeyType="next"
@@ -129,15 +130,41 @@ export default class PromoScreen extends React.Component {
                       value={quantity}
                       placeholder="Quantity"
                       placeholderTextColor="#0468d4"
-                      returnKeyType="go"
+                      returnKeyType="done"
                       autoCapitalize="none"
                       autoCorrect={false}
                       ref="FourthInput"
-                      onSubmitEditing={event => this.submit()}
+                      onSubmitEditing={event => {
+                        this.refs.FifthInput._root.focus();
+                      }}
                       onChangeText={value =>
                         this.onChangeText("quantity", value)
                       }
                     />
+                  </Item>
+                  {/*  Type section  */}
+                  <Item style={styles.pickerStyle}>
+                    <Picker
+                      mode="dropdown"
+                      placeholder="Select drink type"
+                      placeholderStyle={{ color: "#0468d4" }}
+                      placeholderIconColor="#007aff"
+                      style={{ borderColor: "#0468d4" }}
+                      selectedValue={type}
+                      ref="FifthInput"
+                      onValueChange={selectedValue =>
+                        this.onChangeText("type", selectedValue)
+                      }
+                    >
+                      <Picker.Item label="Beer" value="Beer" />
+                      <Picker.Item label="Wine" value="Wine" />
+                      <Picker.Item label="Spirits" value="Spirits" />
+                      <Picker.Item label="Cocktail" value="Cocktail" />
+                      <Picker.Item
+                        label="Non-alcoholic"
+                        value="Non-alcoholic"
+                      />
+                    </Picker>
                   </Item>
                   <TouchableOpacity
                     onPress={() => this.submit()}
@@ -178,6 +205,10 @@ const styles = StyleSheet.create({
   },
   itemStyle: {
     marginBottom: 10,
+    borderColor: "#5a52a5"
+  },
+  pickerStyle: {
+    marginBottom: 30,
     borderColor: "#5a52a5"
   },
   buttonStyle: {

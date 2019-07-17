@@ -19,7 +19,7 @@ export default function Emoji(props) {
   const { type } = props;
   return (
     <EmojiWrapper>
-      <EmojiIcon>🍸</EmojiIcon>
+      <EmojiIcon>{type}</EmojiIcon>
     </EmojiWrapper>
   );
 }

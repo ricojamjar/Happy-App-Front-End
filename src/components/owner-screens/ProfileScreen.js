@@ -35,8 +35,9 @@ export default class PromoScreen extends React.Component {
     Auth.currentAuthenticatedUser()
       .then(user => {
         getOwnerByOwnerId(user.username).then(ownerDetails => {
-          this.setState(ownerDetails)
-          console.log(this.state)
+          
+          this.setState({ownerDetails})
+
         })
        
       })

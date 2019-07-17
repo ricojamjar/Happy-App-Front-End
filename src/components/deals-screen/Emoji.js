@@ -18,11 +18,13 @@ const EmojiIcon = styled.Text`
 export default function Emoji({ type }) {
   return (
     <EmojiWrapper>
+
       {type === "Beer" ? <EmojiIcon>🍺️</EmojiIcon> : null}
       {type === "Wine" ? <EmojiIcon>🍷️</EmojiIcon> : null}
       {type === "Spirits" ? <EmojiIcon>🥃️</EmojiIcon> : null}
       {type === "Cocktail" ? <EmojiIcon>🍸️</EmojiIcon> : null}
       {type === "Non-alcoholic" ? <EmojiIcon>🥛️</EmojiIcon> : null}
+   
     </EmojiWrapper>
   );
 }

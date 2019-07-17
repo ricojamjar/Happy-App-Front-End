@@ -2,7 +2,7 @@ import axios from "axios";
 import { googleApiKey } from "../apiKey";
 
 const request = axios.create({
-  baseURL: "https://uo5xzzqrwb.execute-api.us-east-1.amazonaws.com/dev/api/"
+  baseURL: "https://vq7vsw3c5j.execute-api.eu-west-2.amazonaws.com/dev/api/"
 });
 
 export const getOwner = phoneNumber => {
@@ -15,12 +15,13 @@ export const getOwner = phoneNumber => {
 
 export const getOffers = () => {
   return request.get(`offers`).then(({ data }) => {
-    return data;
+    return data.Items;
   });
 };
 
 export const getOwnerByOwnerId = ownerId => {
   return request.get(`owners/${ownerId}`).then(({ data }) => {
+    console.log(data, "ownerbyId");
     return data;
   });
 };

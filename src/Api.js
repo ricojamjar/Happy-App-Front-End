@@ -10,18 +10,19 @@ export const getOwner = phoneNumber => {
     .get(
       `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=%2B${phoneNumber}&inputtype=phonenumber&fields=formatted_address,name,place_id,geometry&key=${googleApiKey}`
     )
-    .then(({ data }) => data.candidates[0]);
+    .then(({ data }) => {
+      return data.candidates[0];
+    });
 };
 
 export const getOffers = () => {
   return request.get(`offers`).then(({ data }) => {
-    return data.Items;
+    return data;
   });
 };
 
 export const getOwnerByOwnerId = ownerId => {
   return request.get(`owners/${ownerId}`).then(({ data }) => {
-    console.log(data, "ownerbyId");
     return data;
   });
 };

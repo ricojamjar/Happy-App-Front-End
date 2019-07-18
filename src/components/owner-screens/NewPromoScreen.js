@@ -8,9 +8,7 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
   Keyboard,
-  View,
-  ScrollView,
-  Alert
+  View
 } from "react-native";
 import MenuButton from "../MenuButton";
 import { Container, Item, Input, Icon, Picker } from "native-base";
@@ -49,9 +47,12 @@ export default class PromoScreen extends React.Component {
   };
   submit = () => {
     const offer = { ...this.state };
-    postOffer(offer).then(() => {
-      this.setState({ ...INPUT });
-    });
+    postOffer(offer)
+      .then(() => {
+        return this.setState({ ...INPUT });
+      })
+      .then(() => this.props.navigation.navigate("Promo"))
+      .catch(console.log);
   };
   render() {
     const { duration, price, drink, quantity, type } = this.state;
@@ -70,7 +71,9 @@ export default class PromoScreen extends React.Component {
             <View style={styles.container}>
               <Container style={styles.infoContainer}>
                 <View style={styles.container}>
-                  <Text style={styles.Text}>Create a new promo</Text>
+                  <Text style={styles.Text}>
+                    Create a new promo (Please fill all fields to submit
+                  </Text>
                   {/*  duration section  */}
                   <Item rounded style={styles.itemStyle}>
                     <Input
@@ -156,6 +159,7 @@ export default class PromoScreen extends React.Component {
                         this.onChangeText("type", selectedValue)
                       }
                     >
+                      <Picker.Item label="Select a drink type" value="" />
                       <Picker.Item label="Beer" value="Beer" />
                       <Picker.Item label="Wine" value="Wine" />
                       <Picker.Item label="Spirits" value="Spirits" />
@@ -168,6 +172,13 @@ export default class PromoScreen extends React.Component {
                   </Item>
                   <TouchableOpacity
                     onPress={() => this.submit()}
+                    disabled={
+                      duration === "" ||
+                      price === "" ||
+                      drink === "" ||
+                      quantity === "" ||
+                      type === ""
+                    }
                     style={styles.buttonStyle}
                   >
                     <Text style={styles.buttonText}>Submit</Text>

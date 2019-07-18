@@ -48,14 +48,20 @@ export default class HomeScreen extends React.Component {
     try {
       // this.setState({ loading: true });
       const { photo_uri, title, description, ownerID, owner } = this.state;
-      console.log(owner);
-      const data = await updateOwnerDetails(ownerID, {
+      console.log({
         ...owner,
         photoUri: photo_uri,
         shortDescription: title,
         longDescription: description
       });
-      console.log(data);
+      updateOwnerDetails(ownerID, {
+        ...owner,
+        photoUri: photo_uri,
+        shortDescription: title,
+        longDescription: description
+      })
+        .then(console.log)
+        .catch(console.log);
       this.setState({
         loading: false,
         photo_uri: "",
@@ -151,6 +157,9 @@ export default class HomeScreen extends React.Component {
                     />
                   </Item>
                   <TouchableOpacity
+                    disabled={
+                      photo_uri === "" || title === "" || description === ""
+                    }
                     onPress={() => this.submit()}
                     style={styles.buttonStyle}
                   >

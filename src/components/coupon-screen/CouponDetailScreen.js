@@ -19,8 +19,10 @@ export default function PromoScreen(props) {
 
   return (
     <View style={styles.container}>
-      <LinearGradient colors={["#fdd96e", "#fdc41c", "#f0a202"]}>
-        <QRCode value={couponID} size={300} bgColor="#1cbbf3" fgColor="white" />
+      <View style={styles.qrcode}>
+        <QRCode value={couponID} size={250} bgColor="#1cbbf3" fgColor="white" />
+      </View>
+      <View style={styles.dealcard}>
         <DealCard
           venueName={name}
           drink={drink}
@@ -29,7 +31,7 @@ export default function PromoScreen(props) {
           type={type}
           duration={duration}
         />
-      </LinearGradient>
+      </View>
     </View>
   );
 }

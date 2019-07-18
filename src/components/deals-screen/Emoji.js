@@ -5,6 +5,7 @@ const EmojiWrapper = styled.Text`
   margin: auto 0px;
   flex: 2;
   text-align: center;
+  justify-content: center;
   width: 35;
   height: 35;
   font-size: 30;

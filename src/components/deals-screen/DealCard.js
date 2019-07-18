@@ -48,7 +48,16 @@ const QuantityPriceWrapper = styled.Text`
 const CountdownWrapper = styled.View``;
 
 export default function DealCard(props) {
-  const { active, venueName, drink, price, quantity, type, duration } = props;
+  const {
+    active,
+    venueName,
+    drink,
+    price,
+    quantity,
+    type,
+    duration,
+    finishesAt
+  } = props;
   return (
     <Card>
       <LeftContainer>

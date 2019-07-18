@@ -29,7 +29,7 @@ export default class LandingScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F75A84",
+    backgroundColor: "#fdd96e",
     alignItems: "center",
     justifyContent: "center"
   }

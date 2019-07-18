@@ -18,7 +18,7 @@ import { Container, Item, Input, Icon } from "native-base";
 
 const INITIAL_STATE = {
   profile: {
-    id: "",
+    itemId: "",
     email: "",
     phoneNumber: "",
     place_id: "",
@@ -44,7 +44,7 @@ export default class HomeScreen extends React.Component {
           profile: {
             ...this.state.profile,
             email: user.attributes.email,
-            id: user.username
+            itemId: user.username
           }
         });
       })

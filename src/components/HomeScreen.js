@@ -74,7 +74,8 @@ export default class HomeScreen extends Component {
                   type,
                   duration,
                   venueName,
-                  itemId
+                  itemId,
+                  finishesAt
                 } = offer;
                 return (
                   <View key={itemId}>
@@ -87,7 +88,8 @@ export default class HomeScreen extends Component {
                           type,
                           coupon_id,
                           duration,
-                          venueName
+                          venueName,
+                          finishesAt
                         })
                       }
                     >
@@ -98,6 +100,7 @@ export default class HomeScreen extends Component {
                         type={type}
                         duration={duration}
                         venueName={venueName}
+                        finishesAt={finishesAt}
                       />
                     </TouchableOpacity>
                   </View>
@@ -116,6 +119,6 @@ export default class HomeScreen extends Component {
         b.createdAt - a.createdAt;
       });
       this.setState({ offers, loading: false });
-    });
+    }).catch(err => console.log(err))
   }
 }

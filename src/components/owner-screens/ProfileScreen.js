@@ -64,8 +64,10 @@ export default class PromoScreen extends React.Component {
         <ScrollView style={{ backgroundColor: "#FDD96E" }}>
           <View style={styles.container}>
             <Text style={styles.textStyle}>{venueName}</Text>
-            <Text style={styles.title}>{shortDescription}</Text>
+            <Text style={styles.address}>{address}</Text>
             <Text style={styles.phone}>Tel: {phoneNumber}</Text>
+            <Text style={styles.title}>{shortDescription}</Text>
+
             <Image
               width={Dimensions.get("window").width - 32}
               source={{
@@ -74,6 +76,7 @@ export default class PromoScreen extends React.Component {
               }}
             />
             <Text style={styles.title}>{longDescription}</Text>
+
             <MapView
               style={styles.map}
               provider="google"
@@ -108,7 +111,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginBottom: 32
   },
-  map: { marginTop: 10, alignSelf: "stretch", height: 300 },
+  map: { alignSelf: "stretch", height: 300 },
 
   textStyle: {
     marginTop: 32,
@@ -117,14 +120,17 @@ const styles = StyleSheet.create({
     color: "#0468d4"
   },
   title: {
-    marginTop: 10,
-    marginBottom: 10,
+    marginTop: 15,
+    marginBottom: 20,
     fontSize: 15,
     color: "#0468d4"
   },
   phone: {
-    marginBottom: 10,
-    fontSize: 15,
+    fontSize: 12,
+    color: "#0468d4"
+  },
+  address: {
+    fontSize: 12,
     color: "#0468d4"
   },
   offer: {

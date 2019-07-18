@@ -64,7 +64,7 @@ export default function DealCard(props) {
         <VenueName name={venueName} />
         <CountdownWrapper>
           <CountDown
-            until={1}
+            until={finishesAt}
             size={15}
             timeToShow={["M", "S"]}
             digitStyle={{ backgroundColor: "#feeec1" }}
@@ -77,7 +77,7 @@ export default function DealCard(props) {
       <DealWrapper>
         <Emoji type={type} />
         <Drink drink={drink} />
-        <QuantityPriceWrapper>{`${quantity} for ${price}`}</QuantityPriceWrapper>
+        <QuantityPriceWrapper>{`${quantity} for £${price}`}</QuantityPriceWrapper>
       </DealWrapper>
     </Card>
   );

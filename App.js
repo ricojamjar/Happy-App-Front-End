@@ -15,6 +15,7 @@ import CreateOwnerScreen from "./src/components/owner-screens/CreateOwnerScreen"
 import ResetPasswordScreen from "./src/components/owner-screens/ResetPasswordScreen";
 import CouponDetailScreen from "./src/components/coupon-screen/CouponDetailScreen";
 import MenuDrawer from "./src/components/MenuDrawer";
+import FlashMessage from "react-native-flash-message";
 import {
   createSwitchNavigator,
   createStackNavigator,
@@ -138,6 +139,10 @@ const AppContainer = createAppContainer(AppNavigator);
 
 export default class App extends React.Component {
   render() {
-    return <AppContainer />;
+    return (
+      <AppContainer>
+        <FlashMessage position="top" />
+      </AppContainer>
+    );
   }
 }

@@ -19,6 +19,8 @@ import {
   deleteOwner,
   postOffer
 } from "../Api";
+import { showMessage, hideMessage } from "react-native-flash-message";
+import FlashMessage from "react-native-flash-message";
 
 const MainView = styled.ScrollView`
   flex: 1;
@@ -42,12 +44,19 @@ export default class HomeScreen extends Component {
           .filter(offer => {
             return offer.durationInSeconds > 0;
           });
+
         this.setState({ sortedOffers, loading: false, refreshing: false });
       })
       .catch(err => console.log(err));
   };
   componentDidMount() {
     this.getOffersAndFilter();
+    showMessage({
+      message: "New Deals!",
+      type: "info",
+      canRegisterAsDefault: true,
+      duration: 20000
+    });
   }
   componentDidUpdate() {
     // setTimeout(this.getOffersAndFilter(), 3000)
@@ -119,6 +128,7 @@ export default class HomeScreen extends Component {
                 );
               })}
             </MapWrapper>
+            <FlashMessage ref="myLocalFlashMessage" />
           </LinearGradient>
         </MainView>
       </>

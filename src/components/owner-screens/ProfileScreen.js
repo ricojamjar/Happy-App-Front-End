@@ -15,10 +15,8 @@ import { getOwnerByOwnerId } from "../../Api";
 import BurgerMenuHeader from "../BurgerMenuHeader";
 
 const INITIAL_STATE = {
-  longDescription:
-    "Whilst we sell fantastic modern & seasonal beers, wines & mixed drinks we also have loose leaf teas and locally sourced filtered coffee from Ancoats Coffee plus sandwiches, pastries, sweet & savory baked goods.",
-  shortDescription:
-    "We are a contemporary pub situated at Sadlers Yard, Manchester.",
+  longDescription: "",
+  shortDescription: "",
   photoUri:
     "https://static1.squarespace.com/static/5437909ee4b02d632f5b2d5d/58d93902e4fcb5ad94d1f2e4/58d976766b8f5b87ea1852f5/1490646748896/DSC_9391.JPG?format=500w",
   latitude: 53.48274499999999,
@@ -31,8 +29,7 @@ export default class PromoScreen extends React.Component {
     Auth.currentAuthenticatedUser()
       .then(user => {
         getOwnerByOwnerId(user.username).then(ownerDetails => {
-          console.log(ownerDetails);
-          this.setState({ ...ownerDetails, ...INITIAL_STATE });
+          this.setState({ ...INITIAL_STATE, ...ownerDetails });
         });
       })
       .catch(err => console.log(err));
@@ -62,13 +59,13 @@ export default class PromoScreen extends React.Component {
             <Text style={styles.phone}>Tel: {phoneNumber}</Text>
             <Text style={styles.title}>{shortDescription}</Text>
 
-            <Image
-              width={Dimensions.get("window").width - 32}
-              source={{
-                uri:
-                  "https://static1.squarespace.com/static/5437909ee4b02d632f5b2d5d/58d93902e4fcb5ad94d1f2e4/58d976766b8f5b87ea1852f5/1490646748896/DSC_9391.JPG?format=500w"
-              }}
-            />
+            {photoUri ? (
+              <Image
+                width={Dimensions.get("window").width - 32}
+                style={{ marginBottom: 10 }}
+                source={{ uri: `${photoUri}` }}
+              />
+            ) : null}
             <Text style={styles.title}>{longDescription}</Text>
 
             <MapView

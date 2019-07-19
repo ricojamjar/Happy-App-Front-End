@@ -31,22 +31,34 @@ const MapWrapper = styled.View`
 export default class HomeScreen extends Component {
   state = { offers: [], loading: true, time: Date.now(), refreshing: false };
 
-  _onRefresh = () => {
-    this.setState({ refreshing: true });
+  getOffersAndFilter = () => {
+    console.log("filter");
     getOffers()
       .then(offers => {
-        offers.sort((a, b) => {
-          b.createdAt - a.createdAt;
-        });
-        this.setState({ offers, loading: false, refreshing: false });
+        const sortedOffers = offers
+          .sort((a, b) => {
+            return b.createdAt - a.createdAt;
+          })
+          .filter(offer => {
+            return offer.durationInSeconds > 0;
+          });
+        this.setState({ sortedOffers, loading: false, refreshing: false });
       })
-      .catch(err => {
-        console.log(err);
-      });
+      .catch(err => console.log(err));
+  };
+  componentDidMount() {
+    this.getOffersAndFilter();
+  }
+  componentDidUpdate() {
+    // setTimeout(this.getOffersAndFilter(), 3000)
+  }
+  _onRefresh = () => {
+    this.setState({ refreshing: true });
+    this.getOffersAndFilter();
   };
 
   render() {
-    const { offers } = this.state;
+    const { sortedOffers } = this.state;
     const { navigate } = this.props.navigation;
     const { navigation } = this.props;
     const { loading } = this.state;
@@ -63,7 +75,7 @@ export default class HomeScreen extends Component {
           <LinearGradient colors={["#fdd96e", "#fdc41c", "#f0a202"]}>
             <MapWrapper>
               {/* map over deals and create a card for each deal */}
-              {offers.map(offer => {
+              {sortedOffers.map(offer => {
                 const {
                   createdAt,
                   active,
@@ -75,7 +87,8 @@ export default class HomeScreen extends Component {
                   duration,
                   venueName,
                   itemId,
-                  finishesAt
+                  finishesAt,
+                  durationInSeconds
                 } = offer;
                 return (
                   <View key={itemId}>
@@ -98,9 +111,8 @@ export default class HomeScreen extends Component {
                         price={price}
                         quantity={quantity}
                         type={type}
-                        duration={duration}
                         venueName={venueName}
-                        finishesAt={finishesAt}
+                        durationInSeconds={durationInSeconds}
                       />
                     </TouchableOpacity>
                   </View>
@@ -111,14 +123,5 @@ export default class HomeScreen extends Component {
         </MainView>
       </>
     );
-  }
-
-  componentDidMount() {
-    getOffers().then(offers => {
-      offers.sort((a, b) => {
-        b.createdAt - a.createdAt;
-      });
-      this.setState({ offers, loading: false });
-    }).catch(err => console.log(err))
   }
 }

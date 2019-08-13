@@ -32,7 +32,6 @@ export default class HomeScreen extends Component {
   state = { offers: [], loading: true, time: Date.now(), refreshing: false };
 
   getOffersAndFilter = () => {
-    console.log("filter");
     getOffers()
       .then(offers => {
         const sortedOffers = offers

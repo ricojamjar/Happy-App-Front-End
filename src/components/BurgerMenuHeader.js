@@ -1,18 +1,17 @@
 import React from "react";
+import styled from "styled-components";
 import MenuButton from "./MenuButton";
-import { StyleSheet, View } from "react-native";
+
+const HeaderWrapper = styled.View`
+  height: 70;
+  background-color: #feeec1;
+`;
 
 export default function BurgerMenuHeader(props) {
   const { navigation } = props;
   return (
-    <View style={styles.headerWrap}>
+    <HeaderWrapper>
       <MenuButton navigation={navigation} />
-    </View>
+    </HeaderWrapper>
   );
 }
-const styles = StyleSheet.create({
-  headerWrap: {
-    height: 70,
-    backgroundColor: "#feeec1"
-  }
-});

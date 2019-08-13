@@ -76,8 +76,6 @@ export default class HomeScreen extends Component {
               {/* map over deals and create a card for each deal */}
               {sortedOffers.map(offer => {
                 const {
-                  createdAt,
-                  active,
                   coupon_id,
                   drink,
                   price,

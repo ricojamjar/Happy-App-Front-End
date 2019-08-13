@@ -3,6 +3,10 @@
 		"happyapp79d21a4e": {
 			"service": "Cognito",
 			"providerPlugin": "awscloudformation"
+		},
+		"happyapp9fe82ac3": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation"
 		}
 	}
 }

@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import DealCard from "../deals-screen/DealCard";
 import QRCode from "react-native-qrcode";
 import { LinearGradient } from "expo-linear-gradient";
+import MenuButton from "../MenuButton";
 
 export default function PromoScreen(props) {
   /*getting items from props*/
@@ -19,6 +20,7 @@ export default function PromoScreen(props) {
 
   return (
     <View style={styles.container}>
+      <MenuButton navigation={navigation} />
       <View style={styles.qrcode}>
         <QRCode value={couponID} size={250} bgColor="#1cbbf3" fgColor="white" />
       </View>

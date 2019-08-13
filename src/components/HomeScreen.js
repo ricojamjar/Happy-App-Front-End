@@ -84,7 +84,6 @@ export default class HomeScreen extends Component {
                   duration,
                   venueName,
                   itemId,
-                  finishesAt,
                   durationInSeconds
                 } = offer;
                 return (
@@ -99,7 +98,7 @@ export default class HomeScreen extends Component {
                           coupon_id,
                           duration,
                           venueName,
-                          finishesAt
+                          durationInSeconds
                         })
                       }
                     >

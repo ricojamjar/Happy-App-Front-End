@@ -72,7 +72,7 @@ export default class PromoScreen extends React.Component {
               <Container style={styles.infoContainer}>
                 <View style={styles.container}>
                   <Text style={styles.Text}>
-                    Create a new promo (Please fill all fields to submit
+                    Create a new promo (Please fill all fields to submit)
                   </Text>
                   {/*  duration section  */}
                   <Item rounded style={styles.itemStyle}>
